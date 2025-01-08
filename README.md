@@ -17,16 +17,13 @@ npm install -g serve
 
 3. Start your computer as a web server:
 ```bash
-serve -host 0.0.0.0 -port 3000
+serve
 ```
 This command turns your computer into a web server that:
 - Serves the index.html file in this repository
 - Listens for incoming connections on port 3000
 - Can be accessed by other computers on your network
 
-4. Find your IP address:
-```bash
-ifconfig | grep "inet " | grep -v 127.0.0.1
 ```
 
 ## For Clients (Students)
