@@ -24,7 +24,6 @@ This command turns your computer into a web server that:
 - Listens for incoming connections on port 3000
 - Can be accessed by other computers on your network
 
-```
 
 ## For Clients (Students)
 1. Get the server's IP address from the presenter
