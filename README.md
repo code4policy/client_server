@@ -6,7 +6,7 @@ A simple demonstration of client-server architecture where one computer becomes 
 
 1. Clone this repository:
 ```bash
-git clone [repository-url]
+git clone https://github.com/code4policy/client_server.git
 cd client-server
 ```
 
