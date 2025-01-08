@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Client-Server Demo</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .server-info {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 20px 0;
+            border: 1px solid #dee2e6;
+        }
+
+        .interactive-demo {
+            margin: 30px 0;
+        }
+
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 5px;
+            transition: background 0.3s;
+        }
+
+        button:hover {
+            background: #0056b3;
+        }
+
+        .response-box {
+            background: #e9ecef;
+            padding: 15px;
+            border-radius: 5px;
+            margin-top: 10px;
+            min-height: 50px;
+        }
+
+        .status {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        .status.success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status.error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .latency {
+            color: #6c757d;
+            font-size: 14px;
+        }
+
+        #clockDisplay {
+            font-size: 1.2em;
+            color: #495057;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Client-Server Interactive Demo</h1>
+        
+        <div class="server-info">
+            <h2>Server Information</h2>
+            <p>You're connected to: <span id="serverAddress"></span></p>
+            <p>Local Time: <span id="clockDisplay"></span></p>
+            <p>Connection Status: <span id="connectionStatus" class="status success">Connected</span></p>
+        </div>
+
+        <div class="interactive-demo">
+            <h2>Request-Response Demo</h2>
+            <button onclick="simulateRequest('GET')">Send GET Request</button>
+            <button onclick="simulateRequest('POST')">Send POST Request</button>
+            <button onclick="testLatency()">Test Latency</button>
+            
+            <div class="response-box" id="responseBox">
+                Response will appear here...
+            </div>
+            <div id="latencyDisplay" class="latency"></div>
+        </div>
+
+        <div class="interactive-demo">
+            <h2>Connection Test</h2>
+            <button onclick="checkConnection()">Check Connection</button>
+            <div class="response-box" id="connectionTestResult"></div>
+        </div>
+    </div>
+
+    <script>
+        // Update clock
+        function updateClock() {
+            const now = new Date();
+            document.getElementById('clockDisplay').textContent = now.toLocaleTimeString();
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
+
+        // Display server address
+        document.getElementById('serverAddress').textContent = window.location.href;
+
+        // Simulate request-response
+        async function simulateRequest(method) {
+            const responseBox = document.getElementById('responseBox');
+            const startTime = performance.now();
+            
+            responseBox.textContent = `Sending ${method} request...`;
+            
+            try {
+                await new Promise(resolve => setTimeout(resolve, 500)); // Simulate network delay
+                
+                const responses = {
+                    'GET': 'Server responded with requested data',
+                    'POST': 'Server successfully processed the data'
+                };
+                
+                responseBox.textContent = responses[method];
+                
+                const endTime = performance.now();
+                document.getElementById('latencyDisplay').textContent = 
+                    `Request took ${Math.round(endTime - startTime)}ms`;
+            } catch (error) {
+                responseBox.textContent = 'Request failed!';
+            }
+        }
+
+        // Test latency
+        async function testLatency() {
+            const latencyDisplay = document.getElementById('latencyDisplay');
+            const startTime = performance.now();
+            
+            try {
+                const response = await fetch(window.location.href);
+                const endTime = performance.now();
+                const latency = Math.round(endTime - startTime);
+                latencyDisplay.textContent = `Current latency: ${latency}ms`;
+            } catch (error) {
+                latencyDisplay.textContent = 'Failed to measure latency';
+            }
+        }
+
+        // Check connection
+        function checkConnection() {
+            const result = document.getElementById('connectionTestResult');
+            const status = document.getElementById('connectionStatus');
+            
+            if (navigator.onLine) {
+                result.textContent = 'Connection test successful! You are connected to the server.';
+                status.textContent = 'Connected';
+                status.className = 'status success';
+            } else {
+                result.textContent = 'Connection test failed! You are not connected to the server.';
+                status.textContent = 'Disconnected';
+                status.className = 'status error';
+            }
+        }
+
+        // Initial connection check
+        checkConnection();
+        window.addEventListener('online', checkConnection);
+        window.addEventListener('offline', checkConnection);
+    </script>
+</body>
+</html>
