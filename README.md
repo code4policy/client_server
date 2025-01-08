@@ -31,6 +31,8 @@ This command turns your computer into a web server that:
 3. Navigate to: `http://PRESENTER_IP:3000`
    You are now making a request to your classmate's computer!
 
+**NOTE: Make sure to be on the same wifi**
+
 ## Common Issues
 1. Can't connect to server:
    - Verify you're on the same network 
