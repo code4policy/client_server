@@ -1,0 +1,8 @@
+{
+    "message": "This is a JSON response",
+    "items": [1, 2, 3],
+    "nested": {
+        "field1": "value1",
+        "field2": "value2"
+    }
+}
